@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Saldos & Outlet - Reel</title>
+  <title>Saldos & Outlet - Reel 9:16</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;900&family=Space+Mono:wght@400;700&family=Syne:wght@800;900&display=swap');
 
@@ -10,7 +10,7 @@
       --primary: #38bdf8;
       --accent: #f43f5e;
       --neon: #22c55e;
-      --bg: #040711;
+      --bg: #030712;
     }
 
     * {
@@ -19,111 +19,133 @@
       padding: 0;
     }
 
+    /* Fondo exterior neutro para centrar la vista vertical en la PC */
     body {
-      background-color: var(--bg);
+      background-color: #000000;
       color: #ffffff;
       font-family: 'Plus Jakarta Sans', sans-serif;
       width: 100vw;
       height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       overflow: hidden;
-      position: relative;
     }
 
-    /* Luces de fondo dinámicas */
-    .glow-1 {
+    /* Canvas vertical estricto proporción 9:16 (TikTok / Reels) */
+    .tiktok-viewport {
+      height: 98vh;
+      width: calc(98vh * (9 / 16));
+      max-width: 100vw;
+      background-color: var(--bg);
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Luces ambientales dentro del teléfono */
+    .ambient-glow {
       position: absolute;
-      top: 10%;
+      top: 15%;
       left: 50%;
       transform: translateX(-50%);
-      width: 90vw;
-      height: 90vw;
-      background: radial-gradient(circle, rgba(244, 63, 94, 0.25) 0%, rgba(56, 189, 248, 0.15) 45%, transparent 70%);
-      filter: blur(80px);
+      width: 140%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.22) 0%, rgba(56, 189, 248, 0.15) 45%, transparent 70%);
+      filter: blur(50px);
       z-index: 1;
       animation: pulseGlow 5s infinite alternate ease-in-out;
     }
 
-    /* Grilla de fondo */
-    .grid {
+    /* Grilla técnica */
+    .grid-overlay {
       position: absolute;
       inset: 0;
       background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-      background-size: 45px 45px;
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+      background-size: 32px 32px;
       z-index: 2;
+      pointer-events: none;
     }
 
-    /* HUD decorativo de grabación (TikTok Frame) */
+    /* HUD superior */
     .hud {
       position: absolute;
-      inset: 28px;
+      top: 24px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: rgba(255, 255, 255, 0.5);
       z-index: 30;
       pointer-events: none;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      color: rgba(255, 255, 255, 0.45);
     }
 
     .hud-rec {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
 
     .rec-point {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       background: #ef4444;
       border-radius: 50%;
       animation: blink 1s infinite steps(2, start);
     }
 
     .hud-brand {
-      position: absolute;
-      top: 0;
-      right: 0;
       color: var(--primary);
     }
 
-    /* Marquesina / Cinta sin fin */
+    /* Marquesina superior continua */
     .ticker {
       position: absolute;
-      top: 80px;
+      top: 60px;
       left: 0;
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       z-index: 25;
-      background: rgba(0, 0, 0, 0.5);
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.6rem 0;
-      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.55);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.5rem 0;
+      backdrop-filter: blur(8px);
     }
 
     .ticker-content {
       display: inline-block;
       white-space: nowrap;
-      animation: marquee 10s linear infinite;
+      animation: marquee 9s linear infinite;
       font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.18em;
       color: #94a3b8;
     }
 
     .ticker-content span {
-      margin: 0 1.5rem;
-      color: #fff;
+      margin: 0 1rem;
+      color: #ffffff;
     }
 
     .ticker-content .hi {
       color: var(--accent);
     }
 
-    /* CONTROL DE ESCENAS (Animación automática total: 9s) */
+    /* Escenas: 100% aisladas con visibility para evitar superposiciones */
     .scene {
       position: absolute;
       inset: 0;
@@ -132,163 +154,169 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 2.5rem;
+      padding: 2rem 1.4rem;
       z-index: 10;
       opacity: 0;
-      transform: scale(0.95);
+      visibility: hidden;
       pointer-events: none;
     }
 
-    /* Escena 1: visible de 0s a 3s */
+    /* Ciclo total: 9s (3s por escena) */
     .scene-1 {
-      animation: playScene1 9s infinite ease-in-out;
+      animation: animScene1 9s infinite ease-in-out;
     }
 
-    /* Escena 2: visible de 3s a 6s */
     .scene-2 {
-      animation: playScene2 9s infinite ease-in-out;
+      animation: animScene2 9s infinite ease-in-out;
     }
 
-    /* Escena 3: visible de 6s a 9s */
     .scene-3 {
-      animation: playScene3 9s infinite ease-in-out;
+      animation: animScene3 9s infinite ease-in-out;
     }
 
-    /* Estilos de elementos */
+    /* Tipografía y elementos */
     .pill {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(56, 189, 248, 0.45);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.4);
       color: var(--primary);
       font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.2em;
-      padding: 0.5rem 1.4rem;
+      letter-spacing: 0.18em;
+      padding: 0.45rem 1rem;
       border-radius: 999px;
-      margin-bottom: 2rem;
-      backdrop-filter: blur(8px);
+      margin-bottom: 1.6rem;
+      backdrop-filter: blur(6px);
     }
 
     .pill-red {
       border-color: rgba(244, 63, 94, 0.5);
       color: #fda4af;
-      box-shadow: 0 0 25px rgba(244, 63, 94, 0.3);
+      box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
     }
 
     h1 {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(3.5rem, 12vw, 5.5rem);
+      font-size: 2.85rem;
       font-weight: 900;
-      line-height: 0.88;
+      line-height: 0.92;
       text-transform: uppercase;
       letter-spacing: -0.04em;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
     }
 
     h1 .outline {
       display: block;
       color: transparent;
-      -webkit-text-stroke: 2px #ffffff;
-      margin-top: 0.4rem;
+      -webkit-text-stroke: 1.8px #ffffff;
+      margin-top: 0.35rem;
     }
 
     h1 .glow {
+      display: block;
       background: linear-gradient(135deg, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      margin-top: 0.35rem;
     }
 
     .desc {
-      font-size: 1.25rem;
+      font-size: 1.05rem;
       color: #cbd5e1;
-      max-width: 85%;
-      line-height: 1.5;
+      max-width: 90%;
+      line-height: 1.45;
+      font-weight: 400;
     }
 
-    /* Tarjeta de Producto */
+    /* Tarjeta escena 2 */
     .card {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 2rem;
-      padding: 2.2rem;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 1.5rem;
+      padding: 1.8rem 1.4rem;
       width: 100%;
-      max-width: 420px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      max-width: 320px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
       text-align: left;
     }
 
     .card-head {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
       font-family: 'Space Mono', monospace;
-      font-size: 0.8rem;
+      font-size: 0.72rem;
     }
 
     .card-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.8rem;
-      margin-top: 1.5rem;
+      gap: 0.6rem;
+      margin-top: 1.2rem;
     }
 
     .stat-box {
       background: rgba(255, 255, 255, 0.05);
-      padding: 0.8rem;
-      border-radius: 1rem;
+      padding: 0.7rem;
+      border-radius: 0.8rem;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .stat-box small {
       display: block;
       color: #94a3b8;
-      font-size: 0.75rem;
+      font-size: 0.68rem;
       font-family: 'Space Mono', monospace;
     }
 
     .stat-box strong {
-      font-size: 1.1rem;
-      color: #fff;
+      font-size: 0.95rem;
+      color: #ffffff;
     }
 
-    /* Botón final */
+    /* Botón llamada a la acción */
     .cta-button {
       display: inline-block;
       background: #ffffff;
       color: #000000;
       font-weight: 900;
-      font-size: 1.2rem;
-      padding: 1.2rem 2.6rem;
+      font-size: 0.95rem;
+      padding: 1rem 1.8rem;
       border-radius: 999px;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      margin-top: 2rem;
-      box-shadow: 0 0 35px rgba(255, 255, 255, 0.4);
+      margin-top: 1.6rem;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.35);
       animation: pulseBtn 1.5s infinite alternate ease-in-out;
     }
 
-    /* KEYFRAMES SECUENCIALES (9 segundos totales = 33% por escena) */
-    @keyframes playScene1 {
-      0% { opacity: 0; transform: scale(0.9) translateY(20px); }
-      4%, 28% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
-      33%, 100% { opacity: 0; transform: scale(1.05) translateY(-20px); pointer-events: none; }
+    /* Keyframes de transición limpia */
+    @keyframes animScene1 {
+      0% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(15px); }
+      4% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
+      28% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
+      32% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-15px); }
+      100% { opacity: 0; visibility: hidden; }
     }
 
-    @keyframes playScene2 {
-      0%, 33% { opacity: 0; transform: scale(0.9) translateY(20px); pointer-events: none; }
-      37%, 61% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
-      66%, 100% { opacity: 0; transform: scale(1.05) translateY(-20px); pointer-events: none; }
+    @keyframes animScene2 {
+      0%, 32% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(15px); }
+      36% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
+      60% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
+      64% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-15px); }
+      100% { opacity: 0; visibility: hidden; }
     }
 
-    @keyframes playScene3 {
-      0%, 66% { opacity: 0; transform: scale(0.9) translateY(20px); pointer-events: none; }
-      70%, 95% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
-      100% { opacity: 0; transform: scale(1.05) translateY(-20px); pointer-events: none; }
+    @keyframes animScene3 {
+      0%, 64% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(15px); }
+      68% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
+      94% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
+      98%, 100% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-15px); }
     }
 
     @keyframes marquee {
@@ -303,73 +331,78 @@
     }
     @keyframes pulseBtn {
       from { transform: scale(1); }
-      to { transform: scale(1.06); }
+      to { transform: scale(1.05); }
     }
   </style>
 </head>
 <body>
 
-  <div class="glow-1"></div>
-  <div class="grid"></div>
+  <!-- Contenedor vertical 9:16 -->
+  <div class="tiktok-viewport">
+    
+    <div class="ambient-glow"></div>
+    <div class="grid-overlay"></div>
 
-  <!-- HUD superior -->
-  <div class="hud">
-    <div class="hud-rec">
-      <span class="rec-point"></span> LIVE DROP
-    </div>
-    <div class="hud-brand">CONCORDIA • E.R.</div>
-  </div>
-
-  <!-- Ticker horizontal continuo -->
-  <div class="ticker">
-    <div class="ticker-content">
-      <span>• PRENDAS NUEVAS</span>
-      <span class="hi">• LIQUIDACIÓN DIRECTA</span>
-      <span>• MEDIDAS REALES CARGADAS</span>
-      <span>• ENVÍOS A COTIZAR</span>
-      <span class="hi">• RESERVA POR 2 HORAS</span>
-      <span>• PRENDAS NUEVAS</span>
-      <span class="hi">• LIQUIDACIÓN DIRECTA</span>
-      <span>• MEDIDAS REALES CARGADAS</span>
-    </div>
-  </div>
-
-  <!-- ESCENA 1: 0 a 3s -->
-  <div class="scene scene-1">
-    <div class="pill pill-red">✦ LIQUIDACIÓN TOTAL ✦</div>
-    <h1>SALDOS<span class="outline">&amp; OUTLET</span><span class="glow">CONCORDIA</span></h1>
-    <p class="desc">Prendas seleccionadas a precio real de liquidación.</p>
-  </div>
-
-  <!-- ESCENA 2: 3 a 6s -->
-  <div class="scene scene-2">
-    <div class="pill">✦ MEDIDAS EXACTAS ✦</div>
-    <div class="card">
-      <div class="card-head">
-        <span style="color: var(--primary);">CATÁLOGO ACTIVO</span>
-        <span style="color: var(--neon); font-weight: 700;">● NUEVO</span>
+    <!-- HUD superior -->
+    <div class="hud">
+      <div class="hud-rec">
+        <span class="rec-point"></span> LIVE DROP
       </div>
-      <h2 style="font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">TALLE EXACTO</h2>
-      <p style="color: #94a3b8; font-size: 0.95rem;">Medidas tomadas sobre prenda plana para que elijas seguro.</p>
-      <div class="card-stats">
-        <div class="stat-box">
-          <small>CAMBIOS</small>
-          <strong>Dentro de 48 hs</strong>
-        </div>
-        <div class="stat-box">
-          <small>RESERVA</small>
-          <strong>Por 2 Horas</strong>
-        </div>
+      <div class="hud-brand">CONCORDIA • E.R.</div>
+    </div>
+
+    <!-- Ticker continuo -->
+    <div class="ticker">
+      <div class="ticker-content">
+        <span>• PRENDAS NUEVAS</span>
+        <span class="hi">• LIQUIDACIÓN DIRECTA</span>
+        <span>• MEDIDAS REALES CARGADAS</span>
+        <span>• ENVÍOS A COTIZAR</span>
+        <span class="hi">• RESERVA POR 2 HS</span>
+        <span>• PRENDAS NUEVAS</span>
+        <span class="hi">• LIQUIDACIÓN DIRECTA</span>
+        <span>• MEDIDAS REALES CARGADAS</span>
       </div>
     </div>
-  </div>
 
-  <!-- ESCENA 3: 6 a 9s -->
-  <div class="scene scene-3">
-    <div class="pill pill-red">✦ PEDIDOS WHATSAPP ✦</div>
-    <h1>RESERVÁ<span class="glow">TU PRENDA</span></h1>
-    <p class="desc">Envíos en Concordia y retiro presencial en local.</p>
-    <div class="cta-button">outletsaldos.netlify.app</div>
+    <!-- Escena 1 -->
+    <div class="scene scene-1">
+      <div class="pill pill-red">✦ LIQUIDACIÓN TOTAL ✦</div>
+      <h1>SALDOS<span class="outline">&amp; OUTLET</span><span class="glow">CONCORDIA</span></h1>
+      <p class="desc">Prendas seleccionadas a precio real de liquidación.</p>
+    </div>
+
+    <!-- Escena 2 -->
+    <div class="scene scene-2">
+      <div class="pill">✦ MEDIDAS EXACTAS ✦</div>
+      <div class="card">
+        <div class="card-head">
+          <span style="color: var(--primary);">CATÁLOGO ACTIVO</span>
+          <span style="color: var(--neon); font-weight: 700;">● NUEVO</span>
+        </div>
+        <h2 style="font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 0.4rem;">TALLE EXACTO</h2>
+        <p style="color: #94a3b8; font-size: 0.85rem;">Medidas sobre prenda plana para que elijas seguro.</p>
+        <div class="card-stats">
+          <div class="stat-box">
+            <small>CAMBIOS</small>
+            <strong>En 48 hs</strong>
+          </div>
+          <div class="stat-box">
+            <small>RESERVA</small>
+            <strong>Por 2 Horas</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Escena 3 -->
+    <div class="scene scene-3">
+      <div class="pill pill-red">✦ PEDIDOS WHATSAPP ✦</div>
+      <h1>RESERVÁ<span class="glow">TU PRENDA</span></h1>
+      <p class="desc">Envíos en Concordia y retiro presencial en local.</p>
+      <div class="cta-button">outletsaldos.netlify.app</div>
+    </div>
+
   </div>
 
 </body>
