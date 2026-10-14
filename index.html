@@ -16,6 +16,7 @@
     <h2>Probando GitHub Pages</h2>
     <p>Veces clickeado: <span id="contador">0</span></p>
     <button onclick="sumar()">Sumar +1</button>
+    <button onclick="restar()">Restar -1</button>
   </div>
 
   <script>
@@ -24,6 +25,10 @@
       n++;
       document.getElementById('contador').textContent = n;
     }
+    function restar() {
+  n--;
+  document.getElementById('contador').textContent = n;
+}
   </script>
 </body>
 </html>
