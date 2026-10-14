@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Saldos & Outlet - Reel 9:16</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Saldos & Outlet - Reel TikTok</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;900&family=Space+Mono:wght@400;700&family=Syne:wght@800;900&display=swap');
 
@@ -19,57 +20,53 @@
       padding: 0;
     }
 
-    /* Fondo exterior neutro para centrar la vista vertical en la PC */
-    body {
-      background-color: #000000;
+    html, body {
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
+      background-color: var(--bg);
       color: #ffffff;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       overflow: hidden;
+      position: relative;
     }
 
-    /* Canvas vertical estricto proporción 9:16 (TikTok / Reels) */
-    .tiktok-viewport {
-      height: 98vh;
-      width: calc(98vh * (9 / 16));
-      max-width: 100vw;
-      background-color: var(--bg);
+    /* Contenedor que ocupa toda la pantalla del celular */
+    .tiktok-stage {
       position: relative;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
       overflow: hidden;
-      border-radius: 18px;
-      box-shadow: 0 0 60px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1);
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
     }
 
-    /* Luces ambientales dentro del teléfono */
+    /* Luces ambientales reactivas */
     .ambient-glow {
       position: absolute;
-      top: 15%;
+      top: 20%;
       left: 50%;
       transform: translateX(-50%);
-      width: 140%;
-      height: 60%;
-      background: radial-gradient(circle, rgba(244, 63, 94, 0.22) 0%, rgba(56, 189, 248, 0.15) 45%, transparent 70%);
-      filter: blur(50px);
+      width: 160vw;
+      height: 160vw;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.3) 0%, rgba(56, 189, 248, 0.2) 45%, transparent 70%);
+      filter: blur(70px);
       z-index: 1;
       animation: pulseGlow 5s infinite alternate ease-in-out;
+      pointer-events: none;
     }
 
-    /* Grilla técnica */
+    /* Grilla estética técnica */
     .grid-overlay {
       position: absolute;
       inset: 0;
       background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-      background-size: 32px 32px;
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 30px 30px;
       z-index: 2;
       pointer-events: none;
     }
@@ -77,16 +74,16 @@
     /* HUD superior */
     .hud {
       position: absolute;
-      top: 24px;
-      left: 20px;
-      right: 20px;
+      top: 18px;
+      left: 18px;
+      right: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.85rem;
       letter-spacing: 0.12em;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.6);
       z-index: 30;
       pointer-events: none;
     }
@@ -98,8 +95,8 @@
     }
 
     .rec-point {
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       background: #ef4444;
       border-radius: 50%;
       animation: blink 1s infinite steps(2, start);
@@ -107,37 +104,38 @@
 
     .hud-brand {
       color: var(--primary);
+      font-weight: 700;
     }
 
-    /* Marquesina superior continua */
+    /* Marquesina superior */
     .ticker {
       position: absolute;
-      top: 60px;
+      top: 55px;
       left: 0;
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       z-index: 25;
-      background: rgba(0, 0, 0, 0.55);
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 0.5rem 0;
+      background: rgba(0, 0, 0, 0.65);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.65rem 0;
       backdrop-filter: blur(8px);
     }
 
     .ticker-content {
       display: inline-block;
       white-space: nowrap;
-      animation: marquee 9s linear infinite;
+      animation: marquee 10s linear infinite;
       font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
+      font-size: 0.9rem;
       font-weight: 700;
       letter-spacing: 0.18em;
-      color: #94a3b8;
+      color: #cbd5e1;
     }
 
     .ticker-content span {
-      margin: 0 1rem;
+      margin: 0 1.2rem;
       color: #ffffff;
     }
 
@@ -145,7 +143,7 @@
       color: var(--accent);
     }
 
-    /* Escenas: 100% aisladas con visibility para evitar superposiciones */
+    /* Escenas independientes */
     .scene {
       position: absolute;
       inset: 0;
@@ -154,66 +152,59 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      padding: 2rem 1.4rem;
+      padding: 2rem 1.6rem;
       z-index: 10;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
     }
 
-    /* Ciclo total: 9s (3s por escena) */
-    .scene-1 {
-      animation: animScene1 9s infinite ease-in-out;
-    }
+    .scene-1 { animation: animScene1 9s infinite ease-in-out; }
+    .scene-2 { animation: animScene2 9s infinite ease-in-out; }
+    .scene-3 { animation: animScene3 9s infinite ease-in-out; }
 
-    .scene-2 {
-      animation: animScene2 9s infinite ease-in-out;
-    }
-
-    .scene-3 {
-      animation: animScene3 9s infinite ease-in-out;
-    }
-
-    /* Tipografía y elementos */
+    /* Badges / Pastillas de texto */
     .pill {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(56, 189, 248, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(56, 189, 248, 0.5);
       color: var(--primary);
       font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 0.9rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.18em;
-      padding: 0.45rem 1rem;
+      letter-spacing: 0.2em;
+      padding: 0.6rem 1.4rem;
       border-radius: 999px;
-      margin-bottom: 1.6rem;
-      backdrop-filter: blur(6px);
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
     }
 
     .pill-red {
-      border-color: rgba(244, 63, 94, 0.5);
+      border-color: rgba(244, 63, 94, 0.6);
       color: #fda4af;
-      box-shadow: 0 0 20px rgba(244, 63, 94, 0.25);
+      box-shadow: 0 0 25px rgba(244, 63, 94, 0.35);
     }
 
+    /* Tipografía grande y contundente para celular */
     h1 {
       font-family: 'Syne', sans-serif;
-      font-size: 2.85rem;
+      font-size: clamp(3.2rem, 14vw, 5rem);
       font-weight: 900;
-      line-height: 0.92;
+      line-height: 0.88;
       text-transform: uppercase;
       letter-spacing: -0.04em;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
     }
 
     h1 .outline {
       display: block;
       color: transparent;
-      -webkit-text-stroke: 1.8px #ffffff;
-      margin-top: 0.35rem;
+      -webkit-text-stroke: 2px #ffffff;
+      margin-top: 0.4rem;
     }
 
     h1 .glow {
@@ -221,102 +212,104 @@
       background: linear-gradient(135deg, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      margin-top: 0.35rem;
+      margin-top: 0.4rem;
     }
 
     .desc {
-      font-size: 1.05rem;
-      color: #cbd5e1;
+      font-size: clamp(1.2rem, 4.5vw, 1.5rem);
+      color: #e2e8f0;
       max-width: 90%;
-      line-height: 1.45;
-      font-weight: 400;
+      line-height: 1.4;
+      font-weight: 500;
+      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
     }
 
-    /* Tarjeta escena 2 */
+    /* Tarjeta escena 2 adaptada a pantalla completa */
     .card {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 1.5rem;
-      padding: 1.8rem 1.4rem;
-      width: 100%;
-      max-width: 320px;
-      backdrop-filter: blur(16px);
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+      background: rgba(15, 23, 42, 0.88);
+      border: 1.5px solid rgba(255, 255, 255, 0.18);
+      border-radius: 2rem;
+      padding: 2.2rem 1.8rem;
+      width: 92%;
+      max-width: 380px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
       text-align: left;
     }
 
     .card-head {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 0.8rem;
+      margin-bottom: 1.2rem;
       font-family: 'Space Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 0.85rem;
     }
 
     .card-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-      margin-top: 1.2rem;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
     }
 
     .stat-box {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.7rem;
-      border-radius: 0.8rem;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.9rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .stat-box small {
       display: block;
       color: #94a3b8;
-      font-size: 0.68rem;
+      font-size: 0.75rem;
       font-family: 'Space Mono', monospace;
     }
 
     .stat-box strong {
-      font-size: 0.95rem;
+      font-size: 1.15rem;
       color: #ffffff;
+      font-weight: 800;
     }
 
-    /* Botón llamada a la acción */
+    /* Botón final grande */
     .cta-button {
       display: inline-block;
       background: #ffffff;
       color: #000000;
       font-weight: 900;
-      font-size: 0.95rem;
-      padding: 1rem 1.8rem;
+      font-size: 1.15rem;
+      padding: 1.3rem 2.4rem;
       border-radius: 999px;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-top: 1.6rem;
-      box-shadow: 0 0 30px rgba(255, 255, 255, 0.35);
+      letter-spacing: 0.05em;
+      margin-top: 2rem;
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.45);
       animation: pulseBtn 1.5s infinite alternate ease-in-out;
     }
 
-    /* Keyframes de transición limpia */
+    /* Animaciones */
     @keyframes animScene1 {
-      0% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(15px); }
+      0% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(20px); }
       4% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
       28% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
-      32% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-15px); }
+      32% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-20px); }
       100% { opacity: 0; visibility: hidden; }
     }
 
     @keyframes animScene2 {
-      0%, 32% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(15px); }
+      0%, 32% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(20px); }
       36% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
       60% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
-      64% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-15px); }
+      64% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-20px); }
       100% { opacity: 0; visibility: hidden; }
     }
 
     @keyframes animScene3 {
-      0%, 64% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(15px); }
+      0%, 64% { opacity: 0; visibility: hidden; transform: scale(0.92) translateY(20px); }
       68% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
       94% { opacity: 1; visibility: visible; transform: scale(1) translateY(0); }
-      98%, 100% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-15px); }
+      98%, 100% { opacity: 0; visibility: hidden; transform: scale(1.04) translateY(-20px); }
     }
 
     @keyframes marquee {
@@ -327,18 +320,17 @@
     @keyframes blink { 50% { opacity: 0; } }
     @keyframes pulseGlow {
       from { transform: translateX(-50%) scale(1); }
-      to { transform: translateX(-50%) scale(1.15); }
+      to { transform: translateX(-50%) scale(1.2); }
     }
     @keyframes pulseBtn {
       from { transform: scale(1); }
-      to { transform: scale(1.05); }
+      to { transform: scale(1.06); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Contenedor vertical 9:16 -->
-  <div class="tiktok-viewport">
+  <div class="tiktok-stage">
     
     <div class="ambient-glow"></div>
     <div class="grid-overlay"></div>
@@ -351,7 +343,7 @@
       <div class="hud-brand">CONCORDIA • E.R.</div>
     </div>
 
-    <!-- Ticker continuo -->
+    <!-- Ticker horizontal continuo -->
     <div class="ticker">
       <div class="ticker-content">
         <span>• PRENDAS NUEVAS</span>
@@ -380,8 +372,8 @@
           <span style="color: var(--primary);">CATÁLOGO ACTIVO</span>
           <span style="color: var(--neon); font-weight: 700;">● NUEVO</span>
         </div>
-        <h2 style="font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 0.4rem;">TALLE EXACTO</h2>
-        <p style="color: #94a3b8; font-size: 0.85rem;">Medidas sobre prenda plana para que elijas seguro.</p>
+        <h2 style="font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 900; margin-bottom: 0.6rem;">TALLE EXACTO</h2>
+        <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.4;">Medidas sobre prenda plana para que elijas seguro.</p>
         <div class="card-stats">
           <div class="stat-box">
             <small>CAMBIOS</small>
