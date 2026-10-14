@@ -3,81 +3,131 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi Primera Web App</title>
+  <title>Adivina el Número</title>
+  
+  <!-- PISO 1: DISEÑO (CSS) -->
   <style>
-   /* El fondo general de la pantalla */
     body {
       font-family: Arial, sans-serif;
-      background: #0f172a; /* Azul marino muy oscuro */
-      color: #f8fafc;       /* Blanco suave para no cansar la vista */
+      background: #0f172a;
+      color: #f8fafc;
       display: grid;
       place-items: center;
       min-height: 90vh;
       margin: 0;
     }
 
-    /* La tarjeta central */
     .card {
-      background: #1e293b; /* Azul pizarra más claro que el fondo */
+      background: #1e293b;
       padding: 2.5rem;
-      border-radius: 16px; /* Esquinas más redondeadas */
+      border-radius: 16px;
       text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4); /* Sombra elegante */
-      border: 1px solid #334155; /* Borde sutil */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      border: 1px solid #334155;
+      max-width: 360px;
+      width: 90%;
     }
 
-    /* El número del contador */
-    #contador {
-      font-size: 2.5rem;   /* Número mucho más grande */
-      font-weight: bold;
-      color: #38bdf8;      /* Celeste brillante */
+    /* Caja para escribir el número */
+    input {
+      width: 100px;
+      padding: 10px;
+      font-size: 1.5rem;
+      text-align: center;
+      border-radius: 8px;
+      border: 2px solid #38bdf8;
+      background: #0f172a;
+      color: #fff;
+      outline: none;
+      margin-bottom: 1rem;
     }
 
-    /* Estilo común para todos los botones */
     button {
-      color: white;
+      background: #38bdf8;
+      color: #0f172a;
       border: none;
-      padding: 12px 24px;  /* Más área para hacer clic fácil */
+      padding: 12px 24px;
       font-size: 1rem;
       font-weight: bold;
       border-radius: 8px;
       cursor: pointer;
-      margin: 8px;         /* Separación entre los dos botones */
-      transition: transform 0.1s; /* Suavidad al presionar */
+      width: 100%;
+      margin-top: 5px;
     }
 
-    button:active {
-      transform: scale(0.95); /* Efecto visual de hundirse al cliquear */
+    button:hover {
+      background: #7dd3fc;
     }
 
-    /* Estilos específicos usando clases individuales */
-    .btn-sumar {
-      background: #10b981; /* Verde esmeralda */
+    /* Mensajes de pista */
+    #mensaje {
+      font-size: 1.2rem;
+      margin-top: 1.5rem;
+      min-height: 30px;
+      font-weight: bold;
     }
 
-    .btn-restar {
-      background: #ef4444; /* Rojo */
+    #intentos-txt {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
     }
   </style>
 </head>
+
 <body>
+  <!-- PISO 2: ESTRUCTURA (HTML) -->
   <div class="card">
-    <h2>Probando GitHub Pages</h2>
-    <p>Veces clickeado: <span id="contador">0</span></p>
-    <button class="btn-sumar" onclick="sumar()">Sumar +1</button>
-    <button class="btn-restar" onclick="restar()">Restar -1</button>
+    <h2>🎯 Adivina el Número</h2>
+    <p>Pensé un número del 1 al 100.<br>¿Podés adivinarlo?</p>
+
+    <!-- Caja de entrada de texto -->
+    <input type="number" id="numero-ingresado" min="1" max="100" placeholder="?">
+    
+    <!-- Botón para probar -->
+    <button onclick="comprobar()">Intentar</button>
+
+    <!-- Textos donde mostraremos las pistas y los intentos -->
+    <div id="mensaje"></div>
+    <div id="intentos-txt">Intentos: <span id="contador-intentos">0</span></div>
   </div>
 
+  <!-- PISO 3: LÓGICA (JavaScript) -->
   <script>
-    let n = 0;
-    function sumar() {
-      n++;
-      document.getElementById('contador').textContent = n;
+    // La computadora elige un número al azar entre 1 y 100
+    let numeroSecreto = Math.floor(Math.random() * 100) + 1;
+    let intentos = 0;
+
+    function comprobar() {
+      // 1. Leemos lo que escribió el usuario en el casillero
+      let entrada = document.getElementById('numero-ingresado');
+      let valor = Number(entrada.value);
+
+      // Si no escribió nada, salimos sin hacer nada
+      if (!valor) return;
+
+      // 2. Sumamos 1 intento y actualizamos en pantalla
+      intentos++;
+      document.getElementById('contador-intentos').textContent = intentos;
+
+      let msg = document.getElementById('mensaje');
+
+      // 3. Comparamos el número ingresado con el secreto
+      if (valor === numeroSecreto) {
+        msg.textContent = '🎉 ¡Ganaste! ¡Ese era el número!';
+        msg.style.color = '#4ade80'; // Verde
+      } else if (valor < numeroSecreto) {
+        msg.textContent = '📈 ¡Más alto!';
+        msg.style.color = '#38bdf8'; // Celeste
+      } else {
+        msg.textContent = '📉 ¡Más bajo!';
+        msg.style.color = '#f87171'; // Rojo
+      }
+
+      // Limpiamos la cajita para el siguiente intento
+      entrada.value = '';
+      entrada.focus();
     }
-    function restar() {
-  n--;
-  document.getElementById('contador').textContent = n;
-}
   </script>
 </body>
 </html>
