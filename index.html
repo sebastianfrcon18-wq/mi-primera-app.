@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Primera Web App</title>
+  <style>
+    body { font-family: sans-serif; display: grid; place-items: center; min-height: 90vh; background: #121212; color: #fff; margin: 0; }
+    .card { background: #1e1e1e; padding: 2rem; border-radius: 12px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    button { background: #0070f3; color: white; border: none; padding: 10px 20px; font-size: 1rem; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+    button:hover { background: #0051bb; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Probando GitHub Pages</h2>
+    <p>Veces clickeado: <span id="contador">0</span></p>
+    <button onclick="sumar()">Sumar +1</button>
+  </div>
+
+  <script>
+    let n = 0;
+    function sumar() {
+      n++;
+      document.getElementById('contador').textContent = n;
+    }
+  </script>
+</body>
+</html>
