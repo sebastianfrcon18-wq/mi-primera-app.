@@ -2,132 +2,451 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Adivina el Número</title>
-  
-  <!-- PISO 1: DISEÑO (CSS) -->
+  <title>Saldos & Outlet - Motion Reel</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #f8fafc;
-      display: grid;
-      place-items: center;
-      min-height: 90vh;
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&family=Space+Mono:wght@400;700&family=Syne:wght@800;900&display=swap');
+
+    :root {
+      --primary: #38bdf8;
+      --accent: #f43f5e;
+      --neon-green: #22c55e;
+      --bg-dark: #030712;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
+      padding: 0;
     }
 
-    .card {
-      background: #1e293b;
-      padding: 2.5rem;
-      border-radius: 16px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      border: 1px solid #334155;
-      max-width: 360px;
-      width: 90%;
+    body {
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
     }
 
-    /* Caja para escribir el número */
-    input {
-      width: 100px;
-      padding: 10px;
-      font-size: 1.5rem;
-      text-align: center;
-      border-radius: 8px;
-      border: 2px solid #38bdf8;
-      background: #0f172a;
-      color: #fff;
-      outline: none;
-      margin-bottom: 1rem;
+    /* Fondo cinemático con luces fluidas */
+    .ambient-sphere-1 {
+      position: absolute;
+      top: -10%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120vw;
+      height: 120vw;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.22) 0%, rgba(56, 189, 248, 0.12) 40%, transparent 70%);
+      filter: blur(80px);
+      z-index: 1;
+      animation: floatGlow 6s ease-in-out infinite alternate;
     }
 
-    button {
-      background: #38bdf8;
-      color: #0f172a;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 5px;
+    .ambient-sphere-2 {
+      position: absolute;
+      bottom: -15%;
+      left: -20%;
+      width: 100vw;
+      height: 100vw;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 60%);
+      filter: blur(90px);
+      z-index: 1;
     }
 
-    button:hover {
-      background: #7dd3fc;
+    /* Overlay de grilla técnica */
+    .tech-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      z-index: 2;
+      pointer-events: none;
     }
 
-    /* Mensajes de pista */
-    #mensaje {
+    /* Decoraciones de visor de cámara / UI futurista */
+    .hud-layer {
+      position: absolute;
+      inset: 32px;
+      z-index: 25;
+      pointer-events: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .hud-tl {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .rec-dot {
+      width: 10px;
+      height: 10px;
+      background: #ef4444;
+      border-radius: 50%;
+      animation: blink 1s steps(2, start) infinite;
+    }
+
+    .hud-tr {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: var(--primary);
+    }
+
+    .hud-cross {
+      position: absolute;
       font-size: 1.2rem;
-      margin-top: 1.5rem;
-      min-height: 30px;
-      font-weight: bold;
+      color: rgba(255, 255, 255, 0.25);
+    }
+    .cross-c1 { top: 30%; left: 8%; }
+    .cross-c2 { top: 30%; right: 8%; }
+    .cross-c3 { bottom: 25%; left: 8%; }
+    .cross-c4 { bottom: 25%; right: 8%; }
+
+    /* Marquesina / Ticker infinito */
+    .ticker-container {
+      position: absolute;
+      top: 85px;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      z-index: 20;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
+      padding: 0.6rem 0;
     }
 
-    #intentos-txt {
+    .ticker-track {
+      display: inline-flex;
+      animation: marquee 12s linear infinite;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
       color: #94a3b8;
+    }
+
+    .ticker-track span {
+      margin: 0 1.5rem;
+      color: #fff;
+    }
+
+    .ticker-track .highlight {
+      color: var(--accent);
+    }
+
+    /* Escenas y animaciones */
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2.5rem;
+      z-index: 15;
+    }
+
+    /* Badges y botones */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--primary);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+    }
+
+    .badge-sale {
+      border-color: rgba(244, 63, 94, 0.5);
+      color: #fda4af;
+      box-shadow: 0 0 25px rgba(244, 63, 94, 0.3);
+    }
+
+    /* Tipografía cinemática */
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3.8rem, 13vw, 5.8rem);
+      font-weight: 900;
+      line-height: 0.88;
+      text-transform: uppercase;
+      letter-spacing: -0.05em;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+    }
+
+    h1 .stroke-text {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 2.5px #ffffff;
+      margin-top: 0.4rem;
+    }
+
+    h1 .glow-text {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: #cbd5e1;
+      max-width: 85%;
+      line-height: 1.5;
+      font-weight: 400;
+      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Escena 2: Tarjeta de producto con estética Glassmorphism */
+    .product-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 2rem;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 440px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      text-align: left;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 1rem;
+    }
+
+    .tag-cat {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--primary);
+      letter-spacing: 0.1em;
+    }
+
+    .price-group {
+      margin: 1.2rem 0;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .price-now {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--neon-green);
+      letter-spacing: -0.03em;
+    }
+
+    .price-old {
+      font-size: 1.6rem;
+      color: #64748b;
+      text-decoration: line-through;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+    }
+
+    .spec-item {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.8rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .spec-label {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .spec-value {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 0.2rem;
+    }
+
+    /* Escena 3: CTA Final */
+    .cta-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .cta-glow-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      color: #000000;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 1.3rem 2.8rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 2rem;
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.4), 0 15px 30px rgba(0, 0, 0, 0.6);
+      animation: pulseBtn 1.8s infinite alternate ease-in-out;
+    }
+
+    .location-tag {
+      margin-top: 1.8rem;
+      font-family: 'Space Mono', monospace;
       font-size: 0.9rem;
-      margin-top: 0.5rem;
+      color: #94a3b8;
+      letter-spacing: 0.1em;
+    }
+
+    /* Keyframes */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes floatGlow {
+      0% { transform: translate(-50%, -5%) scale(1); }
+      100% { transform: translate(-45%, 5%) scale(1.15); }
+    }
+
+    @keyframes pulseBtn {
+      from { transform: scale(1); box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); }
+      to { transform: scale(1.05); box-shadow: 0 0 45px rgba(56, 189, 248, 0.6); }
     }
   </style>
 </head>
+<body data-duration="9">
 
-<body>
-  <!-- PISO 2: ESTRUCTURA (HTML) -->
-  <div class="card">
-    <h2>🎯 Adivina el Número</h2>
-    <p>Pensé un número del 1 al 100.<br>¿Podés adivinarlo?</p>
+  <!-- Fondos dinámicos -->
+  <div class="ambient-sphere-1"></div>
+  <div class="ambient-sphere-2"></div>
+  <div class="tech-grid"></div>
 
-    <!-- Caja de entrada de texto -->
-    <input type="number" id="numero-ingresado" min="1" max="100" placeholder="?">
-    
-    <!-- Botón para probar -->
-    <button onclick="comprobar()">Intentar</button>
-
-    <!-- Textos donde mostraremos las pistas y los intentos -->
-    <div id="mensaje"></div>
-    <div id="intentos-txt">Intentos: <span id="contador-intentos">0</span></div>
+  <!-- HUD decorativo de grabación (Estilo visor) -->
+  <div class="hud-layer">
+    <div class="hud-tl">
+      <span class="rec-dot"></span> REC [00:09]
+    </div>
+    <div class="hud-tr">CONCORDIA • E.R.</div>
+    <div class="hud-cross cross-c1">+</div>
+    <div class="hud-cross cross-c2">+</div>
+    <div class="hud-cross cross-c3">+</div>
+    <div class="hud-cross cross-c4">+</div>
   </div>
 
-  <!-- PISO 3: LÓGICA (JavaScript) -->
-  <script>
-    // La computadora elige un número al azar entre 1 y 100
-    let numeroSecreto = Math.floor(Math.random() * 100) + 1;
-    let intentos = 0;
+  <!-- Ticker / Marquesina continua de ofertas -->
+  <div class="ticker-container">
+    <div class="ticker-track">
+      <span>• PRENDAS NUEVAS</span>
+      <span class="highlight">• LIQUIDACIÓN TOTAL</span>
+      <span>• MEDIDAS REALES CARGADAS</span>
+      <span>• ENVÍOS A COTIZAR</span>
+      <span class="highlight">• CAMBIOS EN 48 HS</span>
+      <span>• PRENDAS NUEVAS</span>
+      <span class="highlight">• LIQUIDACIÓN TOTAL</span>
+      <span>• MEDIDAS REALES CARGADAS</span>
+    </div>
+  </div>
 
-    function comprobar() {
-      // 1. Leemos lo que escribió el usuario en el casillero
-      let entrada = document.getElementById('numero-ingresado');
-      let valor = Number(entrada.value);
+  <!-- Escena 1: Apertura de marca (0 a 3s) -->
+  <div class="scene" data-start="0" data-duration="3">
+    <div class="pill badge-sale">
+      ✦ OPORTUNIDAD ÚNICA ✦
+    </div>
+    <h1>
+      SALDOS
+      <span class="stroke-text">&amp; OUTLET</span>
+      <span class="glow-text">CONCORDIA</span>
+    </h1>
+    <p class="subtitle">Prendas de primera selección a precio real de liquidación.</p>
+  </div>
 
-      // Si no escribió nada, salimos sin hacer nada
-      if (!valor) return;
+  <!-- Escena 2: Muestra técnica de prenda (3 a 6s) -->
+  <div class="scene" data-start="3" data-duration="3">
+    <div class="pill">
+      ✦ MEDIDAS EXACTAS CARGADAS ✦
+    </div>
+    <div class="product-card">
+      <div class="card-top">
+        <span class="tag-cat">STOCK DISPONIBLE</span>
+        <span style="color: var(--neon-green); font-size: 0.85rem; font-weight: 700;">● NUEVO</span>
+      </div>
+      <h2 style="font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;">PRENDA SELECCIONADA</h2>
+      <div class="price-group">
+        <span class="price-now">LIQUIDACIÓN</span>
+      </div>
+      <div class="specs-grid">
+        <div class="spec-item">
+          <div class="spec-label">Medición</div>
+          <div class="spec-value">Sobre plano</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Reserva</div>
+          <div class="spec-value">Por 2 Horas</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-      // 2. Sumamos 1 intento y actualizamos en pantalla
-      intentos++;
-      document.getElementById('contador-intentos').textContent = intentos;
+  <!-- Escena 3: Llamado a la acción WhatsApp (6 a 9s) -->
+  <div class="scene" data-start="6" data-duration="3">
+    <div class="cta-container">
+      <div class="pill badge-sale">
+        ✦ PEDÍ EL CATÁLOGO ✦
+      </div>
+      <h1>
+        RESERVÁ
+        <span class="glow-text">POR WHATSAPP</span>
+      </h1>
+      <p class="subtitle">Retirá en local o coordiná envío en Concordia al instante.</p>
+      <div class="cta-glow-btn">
+        outletsaldos.netlify.app
+      </div>
+      <div class="location-tag">
+        CONCORDIA, ENTRE RÍOS
+      </div>
+    </div>
+  </div>
 
-      let msg = document.getElementById('mensaje');
-
-      // 3. Comparamos el número ingresado con el secreto
-      if (valor === numeroSecreto) {
-        msg.textContent = '🎉 ¡Ganaste! ¡Ese era el número!';
-        msg.style.color = '#4ade80'; // Verde
-      } else if (valor < numeroSecreto) {
-        msg.textContent = '📈 ¡Más alto!';
-        msg.style.color = '#38bdf8'; // Celeste
-      } else {
-        msg.textContent = '📉 ¡Más bajo!';
-        msg.style.color = '#f87171'; // Rojo
-      }
-
-      // Limpiamos la cajita para el siguiente intento
-      entrada.value = '';
-      entrada.focus();
-    }
-  </script>
 </body>
 </html>
