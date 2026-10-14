@@ -2,15 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Saldos & Outlet - Motion Reel</title>
+  <title>Saldos & Outlet - Reel</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&family=Space+Mono:wght@400;700&family=Syne:wght@800;900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;900&family=Space+Mono:wght@400;700&family=Syne:wght@800;900&display=swap');
 
     :root {
       --primary: #38bdf8;
       --accent: #f43f5e;
-      --neon-green: #22c55e;
-      --bg-dark: #030712;
+      --neon: #22c55e;
+      --bg: #040711;
     }
 
     * {
@@ -20,7 +20,7 @@
     }
 
     body {
-      background-color: var(--bg-dark);
+      background-color: var(--bg);
       color: #ffffff;
       font-family: 'Plus Jakarta Sans', sans-serif;
       width: 100vw;
@@ -29,126 +29,101 @@
       position: relative;
     }
 
-    /* Fondo cinemático con luces fluidas */
-    .ambient-sphere-1 {
+    /* Luces de fondo dinámicas */
+    .glow-1 {
       position: absolute;
-      top: -10%;
+      top: 10%;
       left: 50%;
       transform: translateX(-50%);
-      width: 120vw;
-      height: 120vw;
-      background: radial-gradient(circle, rgba(244, 63, 94, 0.22) 0%, rgba(56, 189, 248, 0.12) 40%, transparent 70%);
+      width: 90vw;
+      height: 90vw;
+      background: radial-gradient(circle, rgba(244, 63, 94, 0.25) 0%, rgba(56, 189, 248, 0.15) 45%, transparent 70%);
       filter: blur(80px);
       z-index: 1;
-      animation: floatGlow 6s ease-in-out infinite alternate;
+      animation: pulseGlow 5s infinite alternate ease-in-out;
     }
 
-    .ambient-sphere-2 {
-      position: absolute;
-      bottom: -15%;
-      left: -20%;
-      width: 100vw;
-      height: 100vw;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, transparent 60%);
-      filter: blur(90px);
-      z-index: 1;
-    }
-
-    /* Overlay de grilla técnica */
-    .tech-grid {
+    /* Grilla de fondo */
+    .grid {
       position: absolute;
       inset: 0;
       background-image: 
         linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
+      background-size: 45px 45px;
       z-index: 2;
-      pointer-events: none;
     }
 
-    /* Decoraciones de visor de cámara / UI futurista */
-    .hud-layer {
+    /* HUD decorativo de grabación (TikTok Frame) */
+    .hud {
       position: absolute;
-      inset: 32px;
-      z-index: 25;
+      inset: 28px;
+      z-index: 30;
       pointer-events: none;
       font-family: 'Space Mono', monospace;
       font-size: 0.8rem;
       letter-spacing: 0.15em;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.45);
     }
 
-    .hud-tl {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .hud-rec {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
-    .rec-dot {
+    .rec-point {
       width: 10px;
       height: 10px;
       background: #ef4444;
       border-radius: 50%;
-      animation: blink 1s steps(2, start) infinite;
+      animation: blink 1s infinite steps(2, start);
     }
 
-    .hud-tr {
+    .hud-brand {
       position: absolute;
       top: 0;
       right: 0;
       color: var(--primary);
     }
 
-    .hud-cross {
+    /* Marquesina / Cinta sin fin */
+    .ticker {
       position: absolute;
-      font-size: 1.2rem;
-      color: rgba(255, 255, 255, 0.25);
-    }
-    .cross-c1 { top: 30%; left: 8%; }
-    .cross-c2 { top: 30%; right: 8%; }
-    .cross-c3 { bottom: 25%; left: 8%; }
-    .cross-c4 { bottom: 25%; right: 8%; }
-
-    /* Marquesina / Ticker infinito */
-    .ticker-container {
-      position: absolute;
-      top: 85px;
+      top: 80px;
       left: 0;
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
-      z-index: 20;
+      z-index: 25;
+      background: rgba(0, 0, 0, 0.5);
       border-top: 1px solid rgba(255, 255, 255, 0.1);
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(8px);
       padding: 0.6rem 0;
+      backdrop-filter: blur(6px);
     }
 
-    .ticker-track {
-      display: inline-flex;
-      animation: marquee 12s linear infinite;
+    .ticker-content {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marquee 10s linear infinite;
       font-family: 'Space Mono', monospace;
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       font-weight: 700;
       letter-spacing: 0.2em;
-      text-transform: uppercase;
       color: #94a3b8;
     }
 
-    .ticker-track span {
+    .ticker-content span {
       margin: 0 1.5rem;
       color: #fff;
     }
 
-    .ticker-track .highlight {
+    .ticker-content .hi {
       color: var(--accent);
     }
 
-    /* Escenas y animaciones */
+    /* CONTROL DE ESCENAS (Animación automática total: 9s) */
     .scene {
       position: absolute;
       inset: 0;
@@ -158,294 +133,243 @@
       align-items: center;
       text-align: center;
       padding: 2.5rem;
-      z-index: 15;
+      z-index: 10;
+      opacity: 0;
+      transform: scale(0.95);
+      pointer-events: none;
     }
 
-    /* Badges y botones */
+    /* Escena 1: visible de 0s a 3s */
+    .scene-1 {
+      animation: playScene1 9s infinite ease-in-out;
+    }
+
+    /* Escena 2: visible de 3s a 6s */
+    .scene-2 {
+      animation: playScene2 9s infinite ease-in-out;
+    }
+
+    /* Escena 3: visible de 6s a 9s */
+    .scene-3 {
+      animation: playScene3 9s infinite ease-in-out;
+    }
+
+    /* Estilos de elementos */
     .pill {
       display: inline-flex;
       align-items: center;
-      gap: 0.6rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(56, 189, 248, 0.4);
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(56, 189, 248, 0.45);
       color: var(--primary);
       font-family: 'Space Mono', monospace;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.25em;
-      padding: 0.6rem 1.4rem;
+      letter-spacing: 0.2em;
+      padding: 0.5rem 1.4rem;
       border-radius: 999px;
       margin-bottom: 2rem;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+      backdrop-filter: blur(8px);
     }
 
-    .badge-sale {
+    .pill-red {
       border-color: rgba(244, 63, 94, 0.5);
       color: #fda4af;
       box-shadow: 0 0 25px rgba(244, 63, 94, 0.3);
     }
 
-    /* Tipografía cinemática */
     h1 {
       font-family: 'Syne', sans-serif;
-      font-size: clamp(3.8rem, 13vw, 5.8rem);
+      font-size: clamp(3.5rem, 12vw, 5.5rem);
       font-weight: 900;
       line-height: 0.88;
       text-transform: uppercase;
-      letter-spacing: -0.05em;
+      letter-spacing: -0.04em;
       margin-bottom: 1.5rem;
-      text-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
     }
 
-    h1 .stroke-text {
+    h1 .outline {
       display: block;
       color: transparent;
-      -webkit-text-stroke: 2.5px #ffffff;
+      -webkit-text-stroke: 2px #ffffff;
       margin-top: 0.4rem;
     }
 
-    h1 .glow-text {
+    h1 .glow {
       background: linear-gradient(135deg, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .subtitle {
+    .desc {
       font-size: 1.25rem;
       color: #cbd5e1;
       max-width: 85%;
       line-height: 1.5;
-      font-weight: 400;
-      text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
     }
 
-    /* Escena 2: Tarjeta de producto con estética Glassmorphism */
-    .product-card {
-      background: rgba(15, 23, 42, 0.7);
+    /* Tarjeta de Producto */
+    .card {
+      background: rgba(15, 23, 42, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 2rem;
-      padding: 2.5rem 2rem;
+      padding: 2.2rem;
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       backdrop-filter: blur(20px);
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
       text-align: left;
     }
 
-    .card-top {
+    .card-head {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 1rem;
-    }
-
-    .tag-cat {
+      margin-bottom: 1rem;
       font-family: 'Space Mono', monospace;
       font-size: 0.8rem;
-      text-transform: uppercase;
-      color: var(--primary);
-      letter-spacing: 0.1em;
     }
 
-    .price-group {
-      margin: 1.2rem 0;
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-    }
-
-    .price-now {
-      font-size: 3rem;
-      font-weight: 900;
-      color: var(--neon-green);
-      letter-spacing: -0.03em;
-    }
-
-    .price-old {
-      font-size: 1.6rem;
-      color: #64748b;
-      text-decoration: line-through;
-    }
-
-    .specs-grid {
+    .card-stats {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.8rem;
       margin-top: 1.5rem;
     }
 
-    .spec-item {
-      background: rgba(255, 255, 255, 0.04);
-      padding: 0.8rem 1rem;
+    .stat-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.8rem;
       border-radius: 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .spec-label {
-      font-size: 0.75rem;
+    .stat-box small {
+      display: block;
       color: #94a3b8;
-      text-transform: uppercase;
+      font-size: 0.75rem;
       font-family: 'Space Mono', monospace;
     }
 
-    .spec-value {
+    .stat-box strong {
       font-size: 1.1rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-top: 0.2rem;
+      color: #fff;
     }
 
-    /* Escena 3: CTA Final */
-    .cta-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-    }
-
-    .cta-glow-btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    /* Botón final */
+    .cta-button {
+      display: inline-block;
       background: #ffffff;
       color: #000000;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 1.2rem;
       font-weight: 900;
-      padding: 1.3rem 2.8rem;
+      font-size: 1.2rem;
+      padding: 1.2rem 2.6rem;
       border-radius: 999px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       margin-top: 2rem;
-      box-shadow: 0 0 35px rgba(255, 255, 255, 0.4), 0 15px 30px rgba(0, 0, 0, 0.6);
-      animation: pulseBtn 1.8s infinite alternate ease-in-out;
+      box-shadow: 0 0 35px rgba(255, 255, 255, 0.4);
+      animation: pulseBtn 1.5s infinite alternate ease-in-out;
     }
 
-    .location-tag {
-      margin-top: 1.8rem;
-      font-family: 'Space Mono', monospace;
-      font-size: 0.9rem;
-      color: #94a3b8;
-      letter-spacing: 0.1em;
+    /* KEYFRAMES SECUENCIALES (9 segundos totales = 33% por escena) */
+    @keyframes playScene1 {
+      0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+      4%, 28% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+      33%, 100% { opacity: 0; transform: scale(1.05) translateY(-20px); pointer-events: none; }
     }
 
-    /* Keyframes */
+    @keyframes playScene2 {
+      0%, 33% { opacity: 0; transform: scale(0.9) translateY(20px); pointer-events: none; }
+      37%, 61% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+      66%, 100% { opacity: 0; transform: scale(1.05) translateY(-20px); pointer-events: none; }
+    }
+
+    @keyframes playScene3 {
+      0%, 66% { opacity: 0; transform: scale(0.9) translateY(20px); pointer-events: none; }
+      70%, 95% { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+      100% { opacity: 0; transform: scale(1.05) translateY(-20px); pointer-events: none; }
+    }
+
     @keyframes marquee {
       0% { transform: translateX(0); }
       100% { transform: translateX(-50%); }
     }
 
-    @keyframes blink {
-      50% { opacity: 0; }
+    @keyframes blink { 50% { opacity: 0; } }
+    @keyframes pulseGlow {
+      from { transform: translateX(-50%) scale(1); }
+      to { transform: translateX(-50%) scale(1.15); }
     }
-
-    @keyframes floatGlow {
-      0% { transform: translate(-50%, -5%) scale(1); }
-      100% { transform: translate(-45%, 5%) scale(1.15); }
-    }
-
     @keyframes pulseBtn {
-      from { transform: scale(1); box-shadow: 0 0 25px rgba(255, 255, 255, 0.3); }
-      to { transform: scale(1.05); box-shadow: 0 0 45px rgba(56, 189, 248, 0.6); }
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
     }
   </style>
 </head>
-<body data-duration="9">
+<body>
 
-  <!-- Fondos dinámicos -->
-  <div class="ambient-sphere-1"></div>
-  <div class="ambient-sphere-2"></div>
-  <div class="tech-grid"></div>
+  <div class="glow-1"></div>
+  <div class="grid"></div>
 
-  <!-- HUD decorativo de grabación (Estilo visor) -->
-  <div class="hud-layer">
-    <div class="hud-tl">
-      <span class="rec-dot"></span> REC [00:09]
+  <!-- HUD superior -->
+  <div class="hud">
+    <div class="hud-rec">
+      <span class="rec-point"></span> LIVE DROP
     </div>
-    <div class="hud-tr">CONCORDIA • E.R.</div>
-    <div class="hud-cross cross-c1">+</div>
-    <div class="hud-cross cross-c2">+</div>
-    <div class="hud-cross cross-c3">+</div>
-    <div class="hud-cross cross-c4">+</div>
+    <div class="hud-brand">CONCORDIA • E.R.</div>
   </div>
 
-  <!-- Ticker / Marquesina continua de ofertas -->
-  <div class="ticker-container">
-    <div class="ticker-track">
+  <!-- Ticker horizontal continuo -->
+  <div class="ticker">
+    <div class="ticker-content">
       <span>• PRENDAS NUEVAS</span>
-      <span class="highlight">• LIQUIDACIÓN TOTAL</span>
+      <span class="hi">• LIQUIDACIÓN DIRECTA</span>
       <span>• MEDIDAS REALES CARGADAS</span>
       <span>• ENVÍOS A COTIZAR</span>
-      <span class="highlight">• CAMBIOS EN 48 HS</span>
+      <span class="hi">• RESERVA POR 2 HORAS</span>
       <span>• PRENDAS NUEVAS</span>
-      <span class="highlight">• LIQUIDACIÓN TOTAL</span>
+      <span class="hi">• LIQUIDACIÓN DIRECTA</span>
       <span>• MEDIDAS REALES CARGADAS</span>
     </div>
   </div>
 
-  <!-- Escena 1: Apertura de marca (0 a 3s) -->
-  <div class="scene" data-start="0" data-duration="3">
-    <div class="pill badge-sale">
-      ✦ OPORTUNIDAD ÚNICA ✦
-    </div>
-    <h1>
-      SALDOS
-      <span class="stroke-text">&amp; OUTLET</span>
-      <span class="glow-text">CONCORDIA</span>
-    </h1>
-    <p class="subtitle">Prendas de primera selección a precio real de liquidación.</p>
+  <!-- ESCENA 1: 0 a 3s -->
+  <div class="scene scene-1">
+    <div class="pill pill-red">✦ LIQUIDACIÓN TOTAL ✦</div>
+    <h1>SALDOS<span class="outline">&amp; OUTLET</span><span class="glow">CONCORDIA</span></h1>
+    <p class="desc">Prendas seleccionadas a precio real de liquidación.</p>
   </div>
 
-  <!-- Escena 2: Muestra técnica de prenda (3 a 6s) -->
-  <div class="scene" data-start="3" data-duration="3">
-    <div class="pill">
-      ✦ MEDIDAS EXACTAS CARGADAS ✦
-    </div>
-    <div class="product-card">
-      <div class="card-top">
-        <span class="tag-cat">STOCK DISPONIBLE</span>
-        <span style="color: var(--neon-green); font-size: 0.85rem; font-weight: 700;">● NUEVO</span>
+  <!-- ESCENA 2: 3 a 6s -->
+  <div class="scene scene-2">
+    <div class="pill">✦ MEDIDAS EXACTAS ✦</div>
+    <div class="card">
+      <div class="card-head">
+        <span style="color: var(--primary);">CATÁLOGO ACTIVO</span>
+        <span style="color: var(--neon); font-weight: 700;">● NUEVO</span>
       </div>
-      <h2 style="font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;">PRENDA SELECCIONADA</h2>
-      <div class="price-group">
-        <span class="price-now">LIQUIDACIÓN</span>
-      </div>
-      <div class="specs-grid">
-        <div class="spec-item">
-          <div class="spec-label">Medición</div>
-          <div class="spec-value">Sobre plano</div>
+      <h2 style="font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">TALLE EXACTO</h2>
+      <p style="color: #94a3b8; font-size: 0.95rem;">Medidas tomadas sobre prenda plana para que elijas seguro.</p>
+      <div class="card-stats">
+        <div class="stat-box">
+          <small>CAMBIOS</small>
+          <strong>Dentro de 48 hs</strong>
         </div>
-        <div class="spec-item">
-          <div class="spec-label">Reserva</div>
-          <div class="spec-value">Por 2 Horas</div>
+        <div class="stat-box">
+          <small>RESERVA</small>
+          <strong>Por 2 Horas</strong>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Escena 3: Llamado a la acción WhatsApp (6 a 9s) -->
-  <div class="scene" data-start="6" data-duration="3">
-    <div class="cta-container">
-      <div class="pill badge-sale">
-        ✦ PEDÍ EL CATÁLOGO ✦
-      </div>
-      <h1>
-        RESERVÁ
-        <span class="glow-text">POR WHATSAPP</span>
-      </h1>
-      <p class="subtitle">Retirá en local o coordiná envío en Concordia al instante.</p>
-      <div class="cta-glow-btn">
-        outletsaldos.netlify.app
-      </div>
-      <div class="location-tag">
-        CONCORDIA, ENTRE RÍOS
-      </div>
-    </div>
+  <!-- ESCENA 3: 6 a 9s -->
+  <div class="scene scene-3">
+    <div class="pill pill-red">✦ PEDIDOS WHATSAPP ✦</div>
+    <h1>RESERVÁ<span class="glow">TU PRENDA</span></h1>
+    <p class="desc">Envíos en Concordia y retiro presencial en local.</p>
+    <div class="cta-button">outletsaldos.netlify.app</div>
   </div>
 
 </body>
